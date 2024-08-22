@@ -1,0 +1,64 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct User {
+    int userID;
+    int balance;
+};
+
+
+int findUserIndex(vector<User>& users, int userID) {
+    for (int i = 0; i < users.size(); i++) {
+        if (users[i].userID == userID) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool compareUsers(const User& u1, const User& u2) {
+    return u1.balance < u2.balance;
+}
+
+int main() {
+    int N;
+    cin >> N; 
+
+    vector<User> users(N);
+
+    for (int i = 0; i < N; i++) {
+        cin >> users[i].userID >> users[i].balance;
+    }
+
+    int T;
+    cin >> T; 
+
+    for (int i = 0; i < T; i++) {
+        int from_userID, to_userID, amount;
+        cin >> from_userID >> to_userID >> amount;
+
+        int fromIndex = findUserIndex(users, from_userID);
+        int toIndex = findUserIndex(users, to_userID);
+
+        if (fromIndex != -1 && toIndex != -1 && users[fromIndex].balance >= amount) {
+          
+            users[fromIndex].balance -= amount;
+            users[toIndex].balance += amount;
+            cout << "Success" << endl;
+        } else {
+            cout << "Failure" << endl;
+        }
+    }
+     sort(users.begin(), users.end(), compareUsers);
+cout<<"\n";
+    for (const User& user : users) {
+        cout << user.userID << " " << user.balance << endl;
+    }
+
+    return 0;
+}
+
+
